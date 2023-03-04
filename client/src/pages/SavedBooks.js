@@ -1,17 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
+/*Importar querys y mutations */
+import { useQuery, useMutation } from '@apollo/client';
+import { QUERY_ME } from '../utils/queries';
+import { REMOVE_BOOK } from '../utils/mutations';
 
-import { getMe, deleteBook } from '../utils/API';
+//se sustituye api por gql
+//import { getMe, deleteBook } from '../utils/API';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
 const SavedBooks = () => {
-  const [userData, setUserData] = useState({});
+  
+  const [removeMyBook, {error}] = useMutation(REMOVE_BOOK);
+  const {loading , data} = useQuery(QUERY_ME);
+  //const [userData, setUserData] = useState({});
+  //sustituir con los datos de la DB
+  const userData = data?.me || {};
 
   // usar esto para determinar si el hook `useEffect()` debe volver a ejecutarse
-  const userDataLength = Object.keys(userData).length;
+  //const userDataLength = Object.keys(userData).length;
 
-  useEffect(() => {
+  /* useEffect(() => {
     const getUserData = async () => {
       try {
         const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -34,7 +44,7 @@ const SavedBooks = () => {
     };
 
     getUserData();
-  }, [userDataLength]);
+  }, [userDataLength]); */
 
   // crear una función que acepte el valor mongo _id del libro como parámetro y elimina el libro de la base de datos
   const handleDeleteBook = async (bookId) => {
@@ -45,14 +55,14 @@ const SavedBooks = () => {
     }
 
     try {
-      const response = await deleteBook(bookId, token);
-
-      if (!response.ok) {
+      //const response = await deleteBook(bookId, token);
+      const {response} = await removeMyBook({variables:{bookId: bookId}});
+      console.log('RemoveMyBook',response);
+/*       if (!response.ok) {
         throw new Error('something went wrong!');
       }
-
       const updatedUser = await response.json();
-      setUserData(updatedUser);
+      setUserData(updatedUser); */
       // tras el éxito, eliminar el identificador del libro de localStorage
       removeBookId(bookId);
     } catch (err) {
@@ -61,7 +71,9 @@ const SavedBooks = () => {
   };
 
   // si los datos aún no están aquí, expresarlo
-  if (!userDataLength) {
+  //if (!userDataLength) 
+  if (loading) 
+  {
     return <h2>LOADING...</h2>;
   }
 
