@@ -7,8 +7,8 @@ const expiration = '2h';
 module.exports = {
   // función para nuestras rutas autenticadas
   authMiddleware: function ({req}) {
-    // permite que el token se envíe a través de req.query o encabezados
-    let token = req.query.token || req.headers.authorization;
+    // permite que el token se envíe a través del body req.query o encabezados
+    let token = req.body.token || req.query.token || req.headers.authorization;
 
     // ["Bearer", "<tokenvalue>"]
     if (req.headers.authorization) {
