@@ -10,12 +10,15 @@
     "build": "cd client && npm run build"
   },
   "keywords": [],
-  "author": "",
+  "author": "Julio Cesar del Angel",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^5.1.0"
   },
   "dependencies": {
     "morgan": "^1.10.0"
+  },
+  "engines": {
+    "node": "16.18.1"
   }
 }
