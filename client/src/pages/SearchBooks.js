@@ -76,8 +76,8 @@ const SearchBooks = () => {
       if (!response.ok) {
         throw new Error('something went wrong!');
       } */
-      const { result } = await saveMyBook({ variables: {input: bookToSave}});
-      console.log('saved', result);
+      const { data } = await saveMyBook({ variables: {input: bookToSave}});
+      console.log('saved', data);
       // si el libro se guarda correctamente en la cuenta del usuario, guardar el identificador del libro en el estado
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {

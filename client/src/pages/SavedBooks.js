@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
 /*Importar querys y mutations */
 import { useQuery, useMutation } from '@apollo/client';
-import { QUERY_ME } from '../utils/queries';
+import { GET_ME } from '../utils/queries';
 import { REMOVE_BOOK } from '../utils/mutations';
 
 //se sustituye api por gql
@@ -13,7 +13,7 @@ import { removeBookId } from '../utils/localStorage';
 const SavedBooks = () => {
   
   const [removeMyBook, {error}] = useMutation(REMOVE_BOOK);
-  const {loading , data} = useQuery(QUERY_ME);
+  const { loading , data } = useQuery(GET_ME);
   //const [userData, setUserData] = useState({});
   //sustituir con los datos de la DB
   const userData = data?.me || {};
@@ -56,8 +56,8 @@ const SavedBooks = () => {
 
     try {
       //const response = await deleteBook(bookId, token);
-      const {response} = await removeMyBook({variables:{bookId: bookId}});
-      console.log('RemoveMyBook',response);
+      const {data} = await removeMyBook({variables:{bookId: bookId}});
+      console.log('RemoveMyBook:',bookId);
 /*       if (!response.ok) {
         throw new Error('something went wrong!');
       }
@@ -76,7 +76,10 @@ const SavedBooks = () => {
   {
     return <h2>LOADING...</h2>;
   }
-
+/*   else
+  {
+    console.log(" user data :" ,userData);
+  } */
   return (
     <>
       <Jumbotron fluid className='text-light bg-dark'>
